@@ -1,0 +1,29 @@
+{
+  "name": "frontend",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@nuxt/image": "^2.1.0",
+    "@nuxt/ui": "^4.10.0",
+    "@nuxtjs/i18n": "^10.6.0",
+    "@pinia/nuxt": "^1.0.1",
+    "annyang": "^3.0.0",
+    "nuxt": "^4.5.2",
+    "pinia": "^4.0.2",
+    "vue": "^3.5.40",
+    "vue-router": "^5.2.0"
+  },
+  "devDependencies": {
+    "@iconify/vue": "^5.0.1",
+    "@nuxtjs/google-fonts": "^3.2.0",
+    "@types/annyang": "^2.6.5",
+    "@types/node": "^26.2.0"
+  }
+}

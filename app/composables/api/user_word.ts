@@ -1,0 +1,22 @@
+import type { CreateUserWordDTO } from "~/types/user_word";
+import { apiHelper } from "../useApiHelper";
+
+export interface Stats {
+  totalWordCount: number;
+  memorizedWordCount: number;
+  mistakedWordCount: number
+}
+
+export function useUserWordApi() {
+    const { apiFetch } = apiHelper();
+
+    function save(payload: CreateUserWordDTO[]): Promise<{ success: boolean }> {
+        return apiFetch("post", "user-words/save", payload);
+    }
+
+    function stats(): Promise<Stats> {
+        return apiFetch("get", "user-words/stats");
+    }
+
+    return { save, stats };
+}

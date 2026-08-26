@@ -1,0 +1,43 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+@theme {
+  --color-aubergine: #2E0B2E;
+}
+
+@layer utilities {
+  .card-gradient-lime {
+    background: linear-gradient(to right, #f7fee7, #ecfdf5);
+    border-color: rgba(190, 242, 100, 0.6);
+  }
+
+  /* Standart (Blue) */
+  .card-gradient-blue {
+    background: linear-gradient(to right, #f0f9ff, #e0f2fe);
+    border-color: rgba(125, 211, 252, 0.6);
+  }
+
+  /* Keşfet (Green) */
+  .card-gradient-green {
+    background: linear-gradient(to right, #ecfdf5, #f0fdf4);
+    border-color: rgba(110, 231, 183, 0.6);
+  }
+
+  /* Sık Hata Yapılanlar (Red) */
+  .card-gradient-red {
+    background: linear-gradient(to right, #fff1f2, #fff5f5);
+    border-color: rgba(252, 165, 165, 0.6);
+  }
+
+  /* Pekiştir (Orange) */
+  .card-gradient-orange {
+    background: linear-gradient(to right, #fffbeb, #fff7ed);
+    border-color: rgba(253, 230, 138, 0.6);
+  }
+}
+
+@layer base {
+  body {
+    font-family: 'Inter', sans-serif;
+  }
+}
