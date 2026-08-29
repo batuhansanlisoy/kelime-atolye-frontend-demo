@@ -59,5 +59,9 @@
   "training.submode.reinforce.title": "Pekiştirme Çalışması",
   "training.submode.reinforce.text": "Daha fazla pratiğe ihtiyaç duyan kelimeleri tekrar ederek hafızanı güçlendir.",
   "training.errors.save.desc": "İlerlemeniz kaydedilirken beklenmeyen bir sorunla karşılaştık. Lütfen biraz sonra tekrar deneyin.",
+  "dictionary.top100.title": "İngilizcede en sık kullanılan ilk 100 kelime ve kullanım sıklığı (frekans) değerleri.",
+  "dictonary.top500.title": "İngilizcede en çok kullanılan ilk 500 kelime ve kullanım sıklığı (frekans) değerleri.",
+  "dictionary.all.title": "{letter} harfi ile başlayan İngilizce kelimeler ve frekans değerleri.",
+  "dictionary.frequency.desc": "Kelime frekans değeri (örn: -4.32), o kelimenin İngilizcede ne sıklıkla kullanıldığını gösterir. Değer 0'a ne kadar yakınsa (mutlak değer olarak küçükse) kelime o kadar yaygın ve sık kullanılır; 0'dan uzaklaştıkça kelime daha nadir karşınıza çıkan ileri düzey bir kelime haline gelir.",
   "error.save": "Kayıt işlemi başarısız oldu!"
 }

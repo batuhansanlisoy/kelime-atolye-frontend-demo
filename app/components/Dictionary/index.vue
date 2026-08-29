@@ -9,6 +9,7 @@ const { words } = defineProps<{ words: Word[] }>();
 <template>
   <div class="flex flex-col gap-5 max-w-7xl mx-auto w-full">
     
+    <slot name="desc" />
     <slot name="category" />
     <slot name="alphabetical-bar" />
 

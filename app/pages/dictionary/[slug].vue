@@ -4,6 +4,7 @@ import { useRoute } from 'vue-router';
 import { useWordApi } from '~/composables/api/word';
 import type { Word } from '~/types/word';
 
+const { t } = useI18n();
 const route = useRoute();
 const slug = computed(() => route.params.slug as string);
 
@@ -70,26 +71,47 @@ const { data: words, pending } = useAsyncData<Word[]>(
     default: () => []
   }
 );
+
+const desc = computed(() => {
+  if (selectedCategory.value === 'top100') return t('dictionary.top100.title');
+  if (selectedCategory.value === 'top500') return t('dictionary.top500.title'); 
+  if (selectedCategory.value === 'all') return t('dictionary.all.title', { letter: selectedLetter.value }); 
+});
 </script>
 
 <template>
-  <Dictionary
-  v-if="!pending"
-  v-model="page"
-  :words="words"
-  :category="selectedCategory">
-    <template
-    v-if="selectedCategory === 'all'" #alphabetical-bar>
-      <DictionaryAlphabeticalBar
-      v-model="selectedLetter" />
-    </template>
-
-    <template
-    v-if="selectedCategory !== 'top100'"
-    #pagination>
-      <DictionaryPaginationBar
-      v-model="page"
-      :selected-category="selectedCategory" />
-    </template>
-  </Dictionary>
+  <div class="my-14">
+    <Dictionary
+    v-if="!pending"
+    v-model="page"
+    :words="words"
+    :category="selectedCategory">
+      
+      <template #desc>
+        <div class="flex flex-col gap-2 bg-white text-gray-700 ">
+          <span class="text-base font-medium">
+            {{ desc }}
+          </span>
+  
+          <span class="text-xs text-gray-600 italic">
+            {{ t('dictionary.frequency.desc') }}
+          </span>
+        </div>
+      </template>
+  
+      <template
+      v-if="selectedCategory === 'all'" #alphabetical-bar>
+        <DictionaryAlphabeticalBar
+        v-model="selectedLetter" />
+      </template>
+  
+      <template
+      v-if="selectedCategory !== 'top100'"
+      #pagination>
+        <DictionaryPaginationBar
+        v-model="page"
+        :selected-category="selectedCategory" />
+      </template>
+    </Dictionary>
+  </div>
 </template>

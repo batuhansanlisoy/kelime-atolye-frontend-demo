@@ -59,5 +59,9 @@
   "training.submode.reinforce.title": "Reinforcement Study",
   "training.submode.reinforce.text": "Strengthen your memory by repeating words that need more practice.",
   "training.errors.save.desc": "We encountered an unexpected issue while saving your progress. Please try again in a moment.",
+  "dictionary.top100.title": "The top 100 most frequently used English words and their frequency values.",
+  "dictonary.top500.title": "The top 500 most frequently used English words and their frequency values.",
+  "dictionary.all.title": "English words starting with the letter {letter} and their frequency values.",
+  "dictionary.frequency.desc": "The word frequency value (e.g., -4.32) indicates how often the word is used in English. The closer the value is to 0 (the smaller it is in absolute value), the more common and frequent the word is; as it gets further from 0, the word becomes more advanced and rarely encountered.",
   "error.save": "Save operation failed!"
 }

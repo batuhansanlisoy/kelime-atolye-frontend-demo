@@ -5,8 +5,6 @@ interface LoginPayload {
   password: string
 }
 
-const localePath = useLocalePath();
-
 // burda token ve user objesini cookieya kayıt ediyorum
 // token zaten istek atarken headera eklenecek
 // user verisi de bana sürekli lazım o yüzde kayıt ediyoruz.
@@ -54,6 +52,8 @@ export const useAuthStore = defineStore('auth', {
 
       const tokenCookie = useCookie('token');
       const userCookie  = useCookie('user');
+
+      const localePath = useLocalePath();
 
       tokenCookie.value = null;
       userCookie.value  = null;
