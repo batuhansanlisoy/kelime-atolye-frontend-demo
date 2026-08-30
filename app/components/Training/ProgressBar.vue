@@ -26,5 +26,7 @@ const progressPercentage = computed(() => {
       class="h-full bg-lime-500 transition-all duration-300 rounded-full" 
       :style="{ width: `${progressPercentage}%` }" />
     </div>
+    
+    <slot name="info" />
   </div>
 </template>

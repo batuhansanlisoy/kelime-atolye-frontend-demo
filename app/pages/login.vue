@@ -6,20 +6,21 @@ definePageMeta({
   layout: false
 });
 
-const email = ref('')
-const password = ref('')
-const rememberMe = ref(false)
+const { t, locale }      = useI18n();
+const localePath = useLocalePath();
 
-const errorMessage = ref('')
-const isLoading = ref(false)
+const email      = ref('');
+const password   = ref('');
+const rememberMe = ref(false);
+
+const errorMessage = ref('');
+const isLoading    = ref(false);
 
 const handleLogin = async () => {
   isLoading.value = true
   errorMessage.value = ''
 
-  // Doğru Kullanım: Store'u fonksiyonun içerisinden çağırıyoruz
   const authStore = useAuthStore();
-  const localePath = useLocalePath();
 
   const result = await authStore.login({
     email: email.value,
@@ -37,71 +38,149 @@ const handleLogin = async () => {
 </script>
 
 <template>
-  <div class="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-zinc-950 text-gray-700 dark:text-zinc-100 px-4 transition-colors duration-300">
-    <div class="w-full max-w-md bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl p-8 shadow-xl">
-      
-      <!-- Başlık Alanı -->
-      <div class="text-center mb-8">
-        <h1 class="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">Kelime Atölye</h1>
-        <p class="text-sm text-red-600 dark:text-red-400 mt-2">Devam etmek için hesabına giriş yap</p>
-      </div>
+  <div class="flex w-full h-screen overflow-hidden bg-white">
+    <!-- Sol Görsel -->
+    <div class="hidden lg:block flex-1 h-full relative">
+      <NuxtImg
+      src="/img/login.png"
+      alt="Login Screen"
+      class="h-screen w-full object-cover" />
 
-      <!-- Form -->
-      <form class="space-y-5" @submit.prevent="handleLogin">
-        <div>
-          <label class="block text-xs font-medium text-gray-700 dark:text-zinc-300 mb-1.5">E-posta Adresi</label>
-          <input 
+      <div class="logo-cover"></div>
+    </div>
+  
+    <!-- Form Field -->
+    <div class="flex flex-col justify-center items-center flex-1 w-full h-full px-1 lg:px-16 overflow-y-auto bg-linear-to-r from-[#dbe3ea] via-white to-white">
+      
+      <div class="w-full max-w-xl bg-white border border-slate-100 rounded-3xl p-8 lg:p-10 shadow-xl shadow-teal-950/5">
+        <!--Lang Switcher-->
+        <div class="flex justify-end">
+          <UIHeaderLang />
+        </div>
+
+        <!-- Logo ve Karşılama Başlığı -->
+        <div class="flex flex-col items-center text-center mb-8">
+          <NuxtLink
+          :to="localePath('/')"
+          class="cursor-pointer">
+            <NuxtImg
+            src="/img/logo.png"
+            alt="Logo"
+            class="h-auto w-36 object-contain mb-4" />
+          </NuxtLink>
+
+          <h1 class="text-2xl font-black text-aubergine tracking-tight">
+            {{ t('form.welcome_again') }}
+          </h1>
+
+          <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">
+            {{ t('form.login_for_train') }}
+          </p>
+        </div>
+
+        <!-- Form -->
+        <form class="space-y-5" @submit.prevent="handleLogin">
+          
+          <!-- Mail -->
+          <div>
+            <label class="form-label">
+              {{ t('form.mail').toLocaleUpperCase(locale) }}
+            </label>
+
+            <input 
             v-model="email" 
             type="email" 
             required
-            placeholder="ornek@email.com"
-            class="w-full px-4 py-2.5 bg-gray-50 dark:bg-zinc-950 border border-gray-300 dark:border-zinc-800 rounded-lg text-sm text-gray-700 dark:text-zinc-100 focus:outline-none focus:border-red-500 dark:focus:border-red-500 focus:ring-1 focus:ring-red-500 transition"
-          >
-        </div>
+            placeholder="example@gmail.com"
+            class="form-input">
+          </div>
 
-        <div>
-          <label class="block text-xs font-medium text-gray-700 dark:text-zinc-300 mb-1.5">Şifre</label>
-          <input
+          <!-- Password -->
+          <div>
+            <label class="form-label">
+              {{ t('form.password').toLocaleUpperCase(locale) }}
+            </label>
+
+            <input
             v-model="password" 
             type="password" 
             required
             placeholder="••••••••"
-            class="w-full px-4 py-2.5 bg-gray-50 dark:bg-zinc-950 border border-gray-300 dark:border-zinc-800 rounded-lg text-sm text-gray-700 dark:text-zinc-100 focus:outline-none focus:border-red-500 dark:focus:border-red-500 focus:ring-1 focus:ring-red-500 transition"
-          >
-        </div>
+            class="form-input">
+          </div>
 
-        <!-- Hata Mesajı Alanı -->
-        <p v-if="errorMessage" class="text-xs text-red-600 dark:text-red-400 font-medium text-center">
-          {{ errorMessage }}
-        </p>
+          <!-- Error Field -->
+          <div
+          v-if="errorMessage"
+          class="p-3 bg-amber-50 border border-amber-200 rounded-xl text-center">
+            <p class="text-xs text-amber-700 font-semibold">
+              {{ errorMessage }}
+            </p>
+          </div>
 
-        <div class="flex items-center justify-between text-sm">
-          <label class="flex items-center gap-2 cursor-pointer text-gray-700 dark:text-zinc-400 hover:text-gray-800 dark:hover:text-zinc-300">
-            <input 
+          <!-- Remember me & fortted password -->
+          <div class="flex items-center justify-between text-sm py-1">
+            <label class="flex items-center gap-2.5 cursor-pointer text-slate-600 hover:text-slate-800 select-none">
+              <input 
               v-model="rememberMe" 
               type="checkbox" 
-              class="w-4 h-4 rounded bg-gray-50 dark:bg-zinc-950 border-gray-300 dark:border-zinc-800 text-red-600 focus:ring-0 cursor-pointer"
-            >
-            <span class="text-xs">Beni hatırla</span>
-          </label>
-          <a href="#" class="text-xs text-red-600 dark:text-zinc-400 hover:underline dark:hover:text-zinc-200 transition">Şifremi unuttum?</a>
-        </div>
+              class="w-4 h-4 rounded-md bg-slate-50 border-slate-300 text-teal-600 focus:ring-teal-500 cursor-pointer accent-teal-600">
+              
+              <span class="text-xs font-medium">
+                {{ t('form.remember_me') }}
+              </span>
+            </label>
 
-        <button 
+            <a href="#" class="text-xs font-semibold text-teal-600 hover:text-teal-700 hover:underline transition">
+              {{ t('form.password.forgetted') }}
+            </a>
+          </div>
+
+          <!-- Submit -->
+          <button 
           type="submit"
           :disabled="isLoading"
-          class="w-full py-2.5 bg-red-600 hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700 text-white font-semibold rounded-lg text-sm active:scale-[0.99] transition disabled:opacity-50"
-        >
-          {{ isLoading ? 'Giriş yapılıyor...' : 'Giriş Yap' }}
-        </button>
-      </form>
+          class="w-full py-4 bg-linear-to-r from-teal-500 to-emerald-500 hover:from-teal-600 hover:to-emerald-600 text-white font-bold rounded-2xl text-base shadow-lg shadow-teal-500/25 active:scale-[0.99] transition-all duration-200 disabled:opacity-50 cursor-pointer flex items-center justify-center gap-2">
+            <UIcon
+            v-if="isLoading"
+            name="heroicons:arrow-path"
+            class="size-5 animate-spin" />
 
-      <!-- Alt Bilgi -->
-      <p class="text-center text-xs text-gray-500 dark:text-zinc-500 mt-6">
-        Hesabın yok mu? 
-        <a href="#" class="text-red-600 dark:text-zinc-300 hover:underline font-medium">Kayıt ol</a>
-      </p>
+            <span>
+              {{ isLoading ? t('form.login.waiting') : t('form.login') }}
+            </span>
+          </button>
+        </form>
 
+        <!-- Kayıt Ol -->
+        <div class="text-center mt-8 pt-6 border-t border-slate-100">
+          <p class="text-xs text-slate-500">
+            {{ t('form.no_account') }}
+
+            <NuxtLink
+            :to="localePath('register')"
+            class="text-teal-600 hover:text-teal-700 hover:underline font-bold ml-1">
+              {{ t('form.quick_register') }}
+            </NuxtLink>
+          </p>
+        </div>
+
+      </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+@reference "@/assets/css/main.css";
+.logo-cover {
+  @apply absolute inset-0 bg-linear-to-tr from-teal-950/40 to-transparent pointer-events-none
+}
+
+.form-label {
+  @apply block text-xs font-bold text-slate-700 mb-2 tracking-wider
+}
+
+.form-input {
+  @apply w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl text-base text-slate-800 placeholder-slate-400 focus:outline-none focus:border-teal-500 focus:bg-white focus:ring-4 focus:ring-teal-500/10 transition-all duration-200
+}
+</style>

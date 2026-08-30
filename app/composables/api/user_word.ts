@@ -10,8 +10,10 @@ export interface Stats {
 export function useUserWordApi() {
     const { apiFetch } = apiHelper();
 
-    function save(payload: CreateUserWordDTO[]): Promise<{ success: boolean }> {
-        return apiFetch("post", "user-words/save", payload);
+    function save(payload: CreateUserWordDTO[], isInitial: boolean = false): Promise<{ success: boolean }> {
+        return apiFetch("post", "user-words/save", payload, {
+          query: { initial: isInitial }
+        });
     }
 
     function stats(): Promise<Stats> {

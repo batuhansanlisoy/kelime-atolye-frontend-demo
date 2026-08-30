@@ -1,8 +1,15 @@
 import { defineStore } from 'pinia'
 
 interface LoginPayload {
-  email: string
-  password: string
+  email: string;
+  password: string;
+}
+
+interface RegisterPayload extends LoginPayload {
+  name: string;
+  last_name: string;
+  phone: string,
+  gender: 'male' | 'female';
 }
 
 // burda token ve user objesini cookieya kayıt ediyorum
@@ -45,7 +52,26 @@ export const useAuthStore = defineStore('auth', {
         }
       }
     },
+    async register(credentials: RegisterPayload) {
+      const { apiHost } = useApiUrl();
 
+      const baseUrl = apiHost();
+      const url = baseUrl+'/auth/register';
+
+      try {
+        await $fetch(url, {
+          method: 'POST',
+          body: credentials,
+        });
+
+        return { success: true }
+      } catch (error: any) {
+        return {
+          success: false,
+          message: error.data?.message || 'Register Error'
+        }
+      }
+    },
     logout() {
       this.token = null;
       this.user  = null;

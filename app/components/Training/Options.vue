@@ -8,7 +8,7 @@ const emits = defineEmits<{
 
 const selectedOption = defineModel<number | null>('selectedOption');
 const currentIndex   = defineModel<number>('currentIndex', { default: 0 });
-const currentWord    = defineModel<Training>('currentWord', { required: true });
+const currentWord    = defineModel<Training | null>('currentWord');
 
 const getOptionClass = (option: any) => {
   const isSelected = selectedOption.value === option.id;
@@ -52,7 +52,9 @@ const nextQuestion = () => {
 </script>
 
 <template>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-3 w-full">
+  <div
+  v-if="currentWord"
+  class="grid grid-cols-1 md:grid-cols-2 gap-3 w-full">
 
     <button 
     v-for="option in currentWord.options"
@@ -83,5 +85,12 @@ const nextQuestion = () => {
 
     </button>
 
+  </div>
+
+  <div
+  v-else
+  class="text-center py-10 px-6 rounded-2xl border border-gray-200 border-dashed w-full bg-gray-50/50 shadow-inner flex flex-col items-center justify-center gap-3 animate-pulse">
+    <div class="h-6 w-16 bg-gray-200 rounded-full"></div>
+    <div class="h-10 w-48 bg-gray-200 rounded-xl mt-2"></div>
   </div>
 </template>

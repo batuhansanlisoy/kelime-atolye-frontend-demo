@@ -48,24 +48,30 @@ const isFinished = computed(() => {
 
 async function submitAnswers() {
   try {
-      await save(answersList.value);
+    // burda kaydediiyor yazısı için 1 saniye bekletiyorum.
+    await Promise.all([
+      save(answersList.value, subMode === 'initial' ? true : false),
+      new Promise(resolve => setTimeout(resolve, 1000))
+    ]);
 
-      if (subMode === 'initial') {
-        emits('initial-save');
-        navigateTo(localePath('education'));
-      }
-    } catch (error) {
-      toast.add({
-        title: t('error.save'),
-        description: t('training.errors.save.desc'),
-        icon: 'i-lucide-circle-alert',
-        color: 'error'
-      });
-    } finally {
-      currentIndex.value = 0;
-      answersList.value = [];
-      trainingWordRefresh();
+    if (subMode === 'initial') {
+      emits('initial-save');
+      navigateTo(localePath('education'));
     }
+  } catch (error) {
+    toast.add({
+      title: t('error.save'),
+      description: t('training.errors.save.desc'),
+      icon: 'i-lucide-circle-alert',
+      color: 'error'
+    });
+  } finally {
+    currentIndex.value = 0;
+    answersList.value = [];
+    correctCount.value = 0;
+    wrongCount.value = 0;
+    trainingWordRefresh();
+  }
 }
 
 function onSelect(answer: Word) {
@@ -91,11 +97,25 @@ watch(isFinished, (finished) => {
     submitAnswers();
   }
 });
+
+onBeforeRouteLeave((to, from, next) => {
+  if (answersList.value.length > 0 && !isFinished.value) {
+    const answer = window.confirm("Antrenman devam ediyor, çıkmak istediğine emin misin? İlerlemeniz kaybolabilir.");
+    
+    if (answer) {
+      next(); // Çıkışa izin ver
+    } else {
+      next(false); // Çıkışı engelle, sayfada kal
+    }
+  } else {
+    next(); // Test bitmişse veya hiç başlamadıysa direk geç izin ver
+  }
+});
 </script>
 
 <template>
   <div
-  v-if="currentWord && trainingWords"
+  v-if="trainingWords"
   class="flex flex-col items-center gap-6 p-8 border border-gray-100 rounded-3xl shadow-sm w-full bg-white">
 
     <!-- Antreman Modu -->
@@ -108,11 +128,8 @@ watch(isFinished, (finished) => {
 
     <!-- Progress Bar -->
     <TrainingProgressBar
-    v-if="subMode == 'initial'"
     :training-words="trainingWords"
-    v-model:current-index="currentIndex"
-    v-model:correct-count="correctCount"
-    v-model:wrong-count="wrongCount">
+    v-model:current-index="currentIndex">
       <template #stats>
         <div class="flex justify-between gap-4">
           <span class="text-lime-600">
@@ -124,11 +141,32 @@ watch(isFinished, (finished) => {
           </span>
         </div>
       </template>
+
+      <template #info>
+        <div class="text-xs text-teal-900">
+          <div v-if="isFinished" class="flex items-center gap-2 text-teal-900 font-medium animate-pulse">
+            <UIcon
+            name="heroicons:arrow-path"
+            class="size-4 animate-spin" />
+            <span>
+              Kaydediliyor...
+            </span>
+          </div>
+
+          <div v-else class="flex items-center gap-2 italic">
+            <UIcon
+            name="material-symbols:info-outline"
+            class="size-4" />
+            Test boyunca çözdüğünüz sorular 10'lu paketler halinde kaydedilir. Sayfadan erken çıkarsanız, en son tamamladığınız 10'lu grup kaydedilmiş olur.
+          </div>
+        </div>
+      </template>
     </TrainingProgressBar>
 
     <!-- Sorulan kelime -->
     <TrainingTargetWord
     v-model:current-word="currentWord" />
+
 
     <!--Options-->
     <TrainingOptions

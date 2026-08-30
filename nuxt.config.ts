@@ -57,6 +57,10 @@ export default defineNuxtConfig({
         tr: '/giris',
         en: '/login'
       },
+      'register': {
+        tr: '/kayit',
+        en: '/register'
+      },
       'reset_password': {
         tr: '/sifre-sifirla',
         en: '/reset-password'

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const { isAuthenticated = false } = defineProps<{ isAuthenticated: boolean }>();
 
 const { locale, t } = useI18n();
 const localePath = useLocalePath();
@@ -54,9 +55,10 @@ onUnmounted(() => document.removeEventListener('click', closeDropdown));
 
 <template>
   <nav class="hidden md:flex items-center gap-2">
-    <NuxtLink 
+    <NuxtLink
+    v-if="isAuthenticated"
     v-for="link in navLinks" 
-    :key="link.path" 
+    :key="link.path"
     :to="localePath(link.path)"
     active-class="bg-gray-100 text-blue-600 font-semibold"
     class="flex items-center gap-2 px-3.5 py-2 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors">
@@ -127,6 +129,7 @@ onUnmounted(() => document.removeEventListener('click', closeDropdown));
                   {{ t('A-Z_index') }}
                 </span>
               </div>
+
               <UIcon name="lucide:chevron-right" class="size-3.5 text-gray-400" />
             </div>
 

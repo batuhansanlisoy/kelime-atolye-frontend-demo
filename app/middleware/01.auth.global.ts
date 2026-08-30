@@ -1,24 +1,36 @@
 export default defineNuxtRouteMiddleware((to) => {
   const localePath = useLocalePath();
   
-  // 🎯 DİKKAT: '/login' yerine route'un adı olan 'login' veriyoruz!
   const exceptionPaths = [
     localePath('/'), 
-    localePath('login'),       // Otomatik olarak tr'de /tr/giris, en'de /en/login üretir
-    localePath('reset_password'), // tr'de /tr/sifre-sifirla, en'de /en/reset-password üretir
-    localePath('education')    // /tr/egitim veya /en/education
+    localePath('login'),
+    localePath('register'),
+    localePath('reset_password'),
+    localePath('dictionary')
   ];
 
   const auth = useAuthStore();
 
-  // İstisnai sayfalarda değilse ve token yoksa doğru login sayfasına at
-  if (!exceptionPaths.includes(to.path) && !auth.token) {
+  /**
+   * home sayfası dışında diğer exceptionPath arrayindeki url ile başlayan alt urlleri çözüyor
+   */
+  const isExceptionPath = exceptionPaths.some(path => {
+    if (path === localePath('/')) {
+      return to.path === path;
+    }
+
+    return to.path.startsWith(path);
+  });
+
+  // Tokeni yoksa(login değilse) ve exceptionPath olarak seçilenler hariç diğer tüm url erişimi kısıtlar
+  if (!isExceptionPath && !auth.token) {
     return navigateTo(localePath('login'));
   }
 
-  // Token'ı var ama login sayfalarına girmeye çalışırsa eğitime at
-  const isAuthPage = to.path.includes('/login') || to.path.includes('/giris') || to.path.includes('/sifre-sifirla');
+  // Token'ı olup login sayfasına erişim engeli
+  const isAuthPage = to.path.includes('/login') || to.path.includes('/giris');
+  
   if (isAuthPage && auth.token) {
-    return navigateTo(localePath('education'));
+    return navigateTo(localePath('/'));
   }
 })

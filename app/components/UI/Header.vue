@@ -1,5 +1,8 @@
 <script setup lang="ts">
+const auth = useAuthStore();
 const localePath = useLocalePath();
+
+const isAuthenticated = computed(() => !!auth.token);
 </script>
 
 <template>
@@ -17,9 +20,10 @@ const localePath = useLocalePath();
           alt="Kelime Atölye Logo"
           class="h-16 w-auto object-contain" />
         </NuxtLink>
-        
+
         <!--Menu-->
-        <UIHeaderNav />
+        <UIHeaderNav
+        :is-authenticated="isAuthenticated"/>
       </div>
 
       <!-- Rigth Side -->
@@ -27,7 +31,8 @@ const localePath = useLocalePath();
         <!--Lang Switcher-->
         <UIHeaderLang />
         <!-- User -->
-        <UIHeaderUser />
+        <UIHeaderUser v-if="isAuthenticated" />
+        <UIHeaderAuth v-if="!isAuthenticated"/>
       </div>
 
     </div>
