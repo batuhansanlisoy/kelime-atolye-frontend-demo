@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Training } from '~/types/training';
 
-const { trainingWords } = defineProps<{ trainingWords: Training[] }>();
+const { trainingWords, theme } = defineProps<{ trainingWords: Training[], theme?: string }>();
 
 const currentIndex = defineModel<number>('currentIndex', { default: 0 });
 
@@ -23,7 +23,8 @@ const progressPercentage = computed(() => {
 
     <div class="w-full h-2.5 bg-gray-100 rounded-full overflow-hidden">
       <div 
-      class="h-full bg-lime-500 transition-all duration-300 rounded-full" 
+      class="h-full transition-all duration-300 rounded-full"
+      :class="theme"
       :style="{ width: `${progressPercentage}%` }" />
     </div>
     

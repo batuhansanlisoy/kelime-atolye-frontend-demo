@@ -16,21 +16,21 @@ const getOptionClass = (option: any) => {
 
   // 1. Henüz seçim yapılmadıysa normal durum
   if (selectedOption.value === null) {
-    return 'bg-white border-gray-200 hover:border-lime-400 hover:bg-lime-50/30 text-gray-700 shadow-sm';
+    return 'bg-white hover:border-green-300 hover:bg-green-50/30 text-gray-700 shadow-xs';
   }
 
   // 2. Doğru şık (Seçilsin veya seçilmesin her zaman yeşil vurgulanır)
   if (isCorrectOption) {
-    return 'bg-lime-50 border-lime-500 text-lime-900 shadow-sm';
+    return 'bg-green-50 border-green-300 text-green-900 shadow-xs';
   }
 
   // 3. Kullanıcının yanlış seçtiği şık
   if (isSelected && !isCorrectOption) {
-    return 'bg-red-50 border-red-500 text-red-900 shadow-sm';
+    return 'bg-red-50 border-red-300 text-red-900 shadow-xs';
   }
 
   // 4. Diğer pasif kalan şıklar
-  return 'opacity-40 border-gray-200 bg-gray-50 text-gray-400';
+  return 'opacity-40 border-gray-200/80 bg-gray-50 text-gray-400';
 };
 
 const handleSelectOption = (option: Word) => {
@@ -59,7 +59,7 @@ const nextQuestion = () => {
     <button 
     v-for="option in currentWord.options"
     :key="option.id"
-    class="w-full p-4 rounded-2xl border font-semibold text-left transition-all duration-200 flex justify-between items-center group"
+    class="w-full p-4 rounded-2xl border-2 border-gray-200/80 font-semibold text-left transition-all duration-200 flex justify-between items-center group cursor-pointer"
     :disabled="selectedOption !== null"
     :class="getOptionClass(option)"
     @click="handleSelectOption(option)">
@@ -68,19 +68,16 @@ const nextQuestion = () => {
         {{ option.turkish }}
       </span>
 
-      <!-- Cevaba Göre İkonlar -->
       <span v-if="selectedOption !== null" class="text-xl flex items-center">
-        <!-- Doğru İkonu -->
-        <Icon 
+        <UIcon 
         v-if="option.turkish === currentWord.turkish" 
-        name="heroicons:check-circle-20-solid" 
-        class="text-lime-600" />
+        name="i-lucide-check" 
+        class="size-5 text-green-600 stroke-[2.5]" />
 
-        <!-- Yanlış İkon -->
-        <Icon 
+        <UIcon 
         v-else-if="selectedOption === option.id" 
-        name="heroicons:x-circle-20-solid" 
-        class="text-red-500" />
+        name="i-lucide-x" 
+        class="size-5 text-red-500 stroke-[2.5]" />
       </span>
 
     </button>

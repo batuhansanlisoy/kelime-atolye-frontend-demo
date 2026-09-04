@@ -7,7 +7,7 @@ const isAuthenticated = computed(() => !!auth.token);
 
 <template>
   <div class="border-b-2 border-b-gray-200 bg-white">
-    <div class="flex items-center justify-between gap-6 w-full mx-auto max-w-7xl py-2 px-4">
+    <div class="flex items-center justify-between gap-6 w-full mx-auto max-w-6xl py-2">
       
       <!-- Sol Taraf -->
       <div class="flex items-center gap-8">

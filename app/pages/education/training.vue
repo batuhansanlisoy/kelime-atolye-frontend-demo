@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useUserScoreApi } from '~/composables/api/user_score';
+import { useUserStats } from '~/composables/User/useUserStats';
 import type { UserScore } from '~/types/user_score';
 
 const auth  = useAuthStore();
@@ -15,6 +16,8 @@ const {
   `user-${auth.user.id}-score`,
   () => getByUserId(),
 );
+
+const { disabledSubModes } = useUserStats();
 
 const activeMode = ref<TrainingMode>('choice');
 
@@ -33,6 +36,15 @@ async function onInitialSave() {
   await userScoreRefresh();
 }
 
+// mistakes antrenmanında atıyorum 20 tane hatalı kelimesi var üst üste 5 kere antreman yaptı kelime sayısı azalacak
+// 10 taneden daha azsa artık antrenman yapamamsı lazım o alt modda o yüzden standarda yollayıp disabled arrayine eklemeliyiz
+function onDisableSubMode (value: string) {
+  if (value !== 'standard') {
+    disabledSubModes.value.push(value);
+    activeSubMode.value = 'standard';
+  }
+}
+
 watch(isInitial, (newVal) => {
   if (newVal && !route.query.subMode) {
     activeSubMode.value = 'initial';
@@ -43,12 +55,15 @@ watch(isInitial, (newVal) => {
 <template>
     <div class="min-h-[80vh] flex flex-col gap-4 justify-center items-center">
       <TrainingMode
+      v-if="!isInitial"
       v-model:active-mode="activeMode"
-      v-model:active-sub-mode="activeSubMode" />
+      v-model:active-sub-mode="activeSubMode"
+      :disabled-sub-modes="disabledSubModes" />
 
       <TrainingModeChoosing
       :subMode="activeSubMode"
-      @initial-save="onInitialSave"/>
+      @initial-save="onInitialSave"
+      @disable-sub-mode="onDisableSubMode"/>
 
       <!-- <TrainingModeTyping /> -->
     </div>

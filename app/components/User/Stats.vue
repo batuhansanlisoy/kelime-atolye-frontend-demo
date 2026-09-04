@@ -1,22 +1,14 @@
 <script setup lang="ts">
-import { useUserWordApi, type Stats } from '~/composables/api/user_word';
+import type { Stats } from '~/composables/api/user_word';
 
-const auth = useAuthStore();
+const { userStats} = defineProps<{ userStats: Stats }>();
+
 const { t, locale } = useI18n();
-
-const { stats } = useUserWordApi();
-// Veriyi çekiyoruz
-const { data: userStats, pending, error } = useAsyncData<Stats>(
-  `user-${auth.user.id}-word-stats`,
-  () => stats()
-);
 </script>
 
 <template>
-  <div
-  v-if="!pending"
-  class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-    
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+
     <!--Memorized Words Card-->
     <div class="bg-white border-3 border-teal-50 shadow-md p-5 rounded-2xl flex items-center justify-between">
       
@@ -51,7 +43,7 @@ const { data: userStats, pending, error } = useAsyncData<Stats>(
   
     </div>
   
-    <div class="bg-white border-3 border-sky-50 shadow-md p-5 rounded-2xl flex items-center justify-between">
+    <div class="bg-white border-3 border-amber-50 shadow-md p-5 rounded-2xl flex items-center justify-between">
 
       <div>
         <div class="flex gap-3 items-center">

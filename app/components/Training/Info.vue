@@ -26,7 +26,7 @@ const {
 
       <div class="space-y-1">
 
-        <h2 class="text-sm font-bold text-lime-900">
+        <h2 class="text-sm font-bold text-gray-700">
           {{ title }}
         </h2>
 

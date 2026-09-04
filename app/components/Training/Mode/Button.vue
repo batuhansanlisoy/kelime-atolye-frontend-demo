@@ -3,8 +3,9 @@ import { TRAINING_MODES, type TrainingMode } from '~/utils/training';
 
 const activeMode = defineModel<TrainingMode>();
 
-const { mode } = defineProps<{
-  mode: TrainingMode
+const { mode, disabled = false } = defineProps<{
+  mode: TrainingMode,
+  disabled?: boolean
 }>();
 
 const { t } = useI18n();
@@ -16,6 +17,7 @@ function setMode(mode: TrainingMode) {
 
 <template>
   <button
+  :disabled="disabled"
   @click="setMode(mode)"
   class="relative flex items-center gap-2.5 py-2 px-4 cursor-pointer rounded-xl transition hover:bg-gray-50">
 
@@ -23,10 +25,15 @@ function setMode(mode: TrainingMode) {
     :name="TRAINING_MODES[mode].icon"
     :class="['size-5 transition-colors', activeMode === mode ? 'text-orange-400' : 'text-gray-600']"/>
 
-    <span
-    :class="['font-semibold text-sm transition-colors', activeMode === mode ? 'text-gray-800' : 'text-gray-700']">
-      {{ t(TRAINING_MODES[mode].label) }}
-    </span>
+    <div class="flex items-center gap-1">
+      <span
+      :class="['font-semibold text-sm transition-colors', activeMode === mode ? 'text-gray-800' : 'text-gray-700']">
+        {{ t(TRAINING_MODES[mode].label) }}
+      </span>
+      <span v-if="disabled" class="text-xs text-purple-900 font-semibold">
+        ({{ t('general.soon') }})
+      </span>
+    </div>
 
     <div
     v-if="activeMode === mode"

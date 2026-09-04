@@ -7,7 +7,8 @@ import type { Word } from '~/types/word';
 import { TRAINING_SUB_MODES } from '~/utils/training';
 
 const emits = defineEmits<{
-    (e: "initial-save"): void
+    (e: "initial-save"): void,
+    (e: 'disable-sub-mode', value: string): void
 }>();
 
 const { subMode } = defineProps<{
@@ -22,7 +23,11 @@ const toast      = useToast();
 const { list } = useTrainingData();
 const { save } = useUserWordApi();
 
-const { data: trainingWords, refresh: trainingWordRefresh } = useAsyncData<Training[]>(
+const {
+  data: trainingWords,
+  pending: trainingPending,
+  refresh: trainingWordRefresh
+} = useAsyncData<Training[]>(
   `user-${auth.user.id}-training-words`,
   () => list({ subMode: subMode }),
   {
@@ -56,21 +61,21 @@ async function submitAnswers() {
 
     if (subMode === 'initial') {
       emits('initial-save');
-      navigateTo(localePath('education'));
+      navigateTo(localePath({ name: 'education', query: { initialSave: 'true' } }));
     }
   } catch (error) {
-    toast.add({
-      title: t('error.save'),
-      description: t('training.errors.save.desc'),
-      icon: 'i-lucide-circle-alert',
-      color: 'error'
-    });
+      toast.add({
+        title: t('error.save'),
+        description: t('training.errors.save.desc'),
+        icon: 'i-lucide-circle-alert',
+        color: 'error'
+      });
   } finally {
-    currentIndex.value = 0;
-    answersList.value = [];
-    correctCount.value = 0;
-    wrongCount.value = 0;
-    trainingWordRefresh();
+      currentIndex.value = 0;
+      answersList.value = [];
+      correctCount.value = 0;
+      wrongCount.value = 0;
+      trainingWordRefresh();
   }
 }
 
@@ -98,17 +103,39 @@ watch(isFinished, (finished) => {
   }
 });
 
+watch([trainingWords, () => subMode, trainingPending], ([words, subMode, pending]) => {
+  currentIndex.value = 0;
+  selectedOption.value = null;
+  correctCount.value = 0;
+  wrongCount.value = 0;
+  answersList.value = [];
+
+  // veri yüklenmeden yönlendirme yapmıyoruz
+  if (pending) return;
+
+  if (subMode === 'mistakes' && (!words || words.length < 10)) {
+    toast.add({
+      title: t('warning.router'),
+      description: t('education.warning.routing.inadequate_mistake'),
+      icon: 'i-lucide-triangle-alert',
+      color: 'warning'
+    });
+
+    emits('disable-sub-mode', 'mistakes');
+  }
+}, { immediate: true });
+
 onBeforeRouteLeave((to, from, next) => {
   if (answersList.value.length > 0 && !isFinished.value) {
     const answer = window.confirm("Antrenman devam ediyor, çıkmak istediğine emin misin? İlerlemeniz kaybolabilir.");
     
     if (answer) {
-      next(); // Çıkışa izin ver
+      next();
     } else {
-      next(false); // Çıkışı engelle, sayfada kal
+      next(false);
     }
   } else {
-    next(); // Test bitmişse veya hiç başlamadıysa direk geç izin ver
+    next();
   }
 });
 </script>
@@ -129,8 +156,9 @@ onBeforeRouteLeave((to, from, next) => {
     <!-- Progress Bar -->
     <TrainingProgressBar
     :training-words="trainingWords"
+    :theme="TRAINING_SUB_MODES[subMode].theme2"
     v-model:current-index="currentIndex">
-      <template #stats>
+      <template v-if="subMode === 'initial'" #stats>
         <div class="flex justify-between gap-4">
           <span class="text-lime-600">
             {{ t('general.correct') }}: {{ correctCount }}
@@ -149,7 +177,7 @@ onBeforeRouteLeave((to, from, next) => {
             name="heroicons:arrow-path"
             class="size-4 animate-spin" />
             <span>
-              Kaydediliyor...
+              {{ t('general.saving') }}
             </span>
           </div>
 
@@ -157,7 +185,8 @@ onBeforeRouteLeave((to, from, next) => {
             <UIcon
             name="material-symbols:info-outline"
             class="size-4" />
-            Test boyunca çözdüğünüz sorular 10'lu paketler halinde kaydedilir. Sayfadan erken çıkarsanız, en son tamamladığınız 10'lu grup kaydedilmiş olur.
+            {{ t('training.progress_bar.saving_info', { word_count: trainingWords.length }) }}
+            <!-- Test boyunca çözdüğünüz sorular 10'lu paketler halinde kaydedilir. Sayfadan erken çıkarsanız, en son tamamladığınız 10'lu grup kaydedilmiş olur. -->
           </div>
         </div>
       </template>
@@ -165,8 +194,9 @@ onBeforeRouteLeave((to, from, next) => {
 
     <!-- Sorulan kelime -->
     <TrainingTargetWord
-    v-model:current-word="currentWord" />
-
+    v-model:current-word="currentWord"
+    :theme="TRAINING_SUB_MODES[subMode].theme"
+    :text-color="TRAINING_SUB_MODES[subMode].textColor" />
 
     <!--Options-->
     <TrainingOptions

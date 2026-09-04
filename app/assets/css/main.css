@@ -34,6 +34,31 @@
     background: linear-gradient(to right, #fffbeb, #fff7ed);
     border-color: rgba(253, 230, 138, 0.6);
   }
+
+  .card-gradient-lime-solid {
+    background: linear-gradient(to right, #d9f99d, #a3e635);
+    border-color: rgba(132, 204, 22, 0.8);
+  }
+
+  .card-gradient-blue-solid {
+    background: linear-gradient(to right, #bae6fd, #38bdf8);
+    border-color: rgba(14, 165, 233, 0.8);
+  }
+
+  .card-gradient-green-solid {
+    background: linear-gradient(to right, #a7f3d0, #34d399);
+    border-color: rgba(16, 185, 129, 0.8);
+  }
+
+  .card-gradient-red-solid {
+    background: linear-gradient(to right, #fecdd3, #fb7185);
+    border-color: rgba(244, 63, 94, 0.8);
+  }
+
+  .card-gradient-orange-solid {
+    background: linear-gradient(to right, #fde68a, #fbbf24);
+    border-color: rgba(245, 158, 11, 0.8);
+  }
 }
 
 @layer base {

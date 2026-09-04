@@ -2,20 +2,21 @@ export type TrainingMode = 'choice' | 'typing' | 'voice'
 export type TrainingSubMode = 'initial' | 'standard' | 'explore' | 'mistakes' | 'reinforce'
 
 export interface TrainingModeItem {
-  id: TrainingMode
-  label: string
-  icon: string
+  id: TrainingMode;
+  label: string;
+  icon: string;
 }
 
 export interface TrainingSubModeItem {
-  id: TrainingSubMode
-  label: string
-  activeColor: string
-  title: string
-  text: string
-  theme: string
-  textColor: string,
-  icon: string
+  id: TrainingSubMode;
+  label: string;
+  activeColor: string;
+  title: string;
+  text: string;
+  theme: string;
+  theme2: string;
+  textColor: string;
+  icon: string;
 }
 
 export const TRAINING_MODES: Record<TrainingMode, TrainingModeItem> = {
@@ -40,46 +41,51 @@ export const TRAINING_SUB_MODES: Record<TrainingSubMode, TrainingSubModeItem> = 
     title: 'training.submode.initial.title',
     text: 'training.submode.initial.text',
     theme: 'card-gradient-lime',
+    theme2: 'card-gradient-lime-solid',
     textColor: 'text-lime-700/80',
     icon: 'lucide:rocket',
   },
   standard: {
     id: 'standard',
     label: 'training.submode.standard',
-    activeColor: 'text-blue-400',
+    activeColor: 'text-blue-500/80',
     title: 'training.submode.standard.title',
     text: 'training.submode.standard.text',
     theme: 'card-gradient-blue',
+    theme2: 'card-gradient-blue-solid',
     textColor: 'text-blue-500/80',
     icon: 'lucide:book-open',
   },
   explore: {
     id: 'explore',
     label: 'training.submode.explore',
-    activeColor: 'text-green-400',
+    activeColor: 'text-green-700/80',
     title: 'training.submode.explore.title',
     text: 'training.submode.explore.text',
     theme: 'card-gradient-green',
+    theme2: 'card-gradient-green-solid',
     textColor: 'text-green-700/80',
     icon: 'lucide:sparkles',
   },
   mistakes: {
     id: 'mistakes',
     label: 'training.submode.mistakes',
-    activeColor: 'text-red-400',
+    activeColor: 'text-red-500/80',
     title: 'training.submode.mistakes.title',
     text: 'training.submode.mistakes.text',
     theme: 'card-gradient-red',
+    theme2: 'card-gradient-red-solid',
     textColor: 'text-red-500/80',
     icon: 'lucide:badge-alert',
   },
   reinforce: {
     id: 'reinforce',
     label: 'training.submode.reinforce',
-    activeColor: 'text-orange-400',
+    activeColor: 'text-orange-500/80',
     title: 'training.submode.reinforce.title',
     text: 'training.submode.reinforce.text',
     theme: 'card-gradient-orange',
+    theme2: 'card-gradient-orange-solid',
     textColor: 'text-orange-500/80',
     icon: 'lucide:brain',
   },

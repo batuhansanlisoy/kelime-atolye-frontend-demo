@@ -4,13 +4,15 @@ import type { TrainingSubMode, TrainingMode } from '~/utils/training';
 const activeMode    = defineModel<TrainingMode>('activeMode', { required: true });
 const activeSubMode = defineModel<TrainingSubMode>('activeSubMode', { required: true });
 
+const { disabledSubModes } = defineProps<{ disabledSubModes: string[] }>();
+
 const { t } = useI18n();
 
 const isEnToTr = ref(true)
 
-// Fonksiyonlar
 const toggleDirection = () => {
-  isEnToTr.value = !isEnToTr.value
+  // isEnToTr.value = !isEnToTr.value
+  return;
 }
 </script>
 
@@ -29,10 +31,12 @@ const toggleDirection = () => {
 
         <TrainingModeButton
         v-model="activeMode"
+        :disabled="true"
         mode="typing"/>
 
         <TrainingModeButton
         v-model="activeMode"
+        :disabled="true"
         mode="voice"/>
       </div>
 
@@ -57,18 +61,22 @@ const toggleDirection = () => {
 
         <TrainingModeSubModeButton
         v-model="activeSubMode"
+        :disabled="disabledSubModes.includes('standard')"
         subMode="standard" />
 
         <TrainingModeSubModeButton
         v-model="activeSubMode"
+        :disabled="disabledSubModes.includes('explore')"
         subMode="explore" />
 
         <TrainingModeSubModeButton
         v-model="activeSubMode"
+        :disabled="disabledSubModes.includes('mistakes')"
         subMode="mistakes" />
 
         <TrainingModeSubModeButton
         v-model="activeSubMode"
+        :disabled="disabledSubModes.includes('reinforce')"
         subMode="reinforce" />
 
       </div>

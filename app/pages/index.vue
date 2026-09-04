@@ -10,8 +10,7 @@ const router     = useRouter();
 const isLeaving  = ref(false);
 const localePath = useLocalePath();
 
-// Hemen Başla'ya basıldığında çalışacak sihirli fonksiyon
-const handleStartAdventure = (e: MouseEvent) => {
+const handleStart = (e: MouseEvent) => {
   e.preventDefault()
   isLeaving.value = true
 
@@ -56,7 +55,7 @@ const handleStartAdventure = (e: MouseEvent) => {
         <div class="mt-10 flex flex-col sm:flex-row items-center gap-4 w-full justify-center">
           <a
           href="/register" 
-          @click="handleStartAdventure"
+          @click="handleStart"
           class="w-full sm:w-auto px-8 py-4 bg-linear-to-r from-teal-400 to-teal-500 text-white font-extrabold rounded-2xl text-base shadow-lg shadow-teal-500/25 transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-2 cursor-pointer">
             <span>
               {{ i18n.t('general.account.create')}}
@@ -77,7 +76,7 @@ const handleStartAdventure = (e: MouseEvent) => {
         <!-- Özellikler Kartları -->
         <div class="mt-24 grid grid-cols-1 md:grid-cols-3 gap-6 w-full text-left">
           
-          <div class="bg-white border-green-50 hover:bg-green-50 text-green-700 p-8 rounded-3xl border-3 shadow-md flex flex-col justify-between space-y-4 group transition-colors">
+          <div class="bg-white border-green-100 hover:bg-green-50 text-green-700 p-8 rounded-3xl border shadow-md flex flex-col justify-between space-y-4 group transition-colors">
             <div>
               <h3 class="text-lg font-bold">
                 {{ i18n.t('index.card1.title')}}
@@ -88,7 +87,7 @@ const handleStartAdventure = (e: MouseEvent) => {
             </div>
           </div>
 
-          <div class="bg-white border-amber-50 hover:bg-amber-50 text-amber-700 p-8 rounded-3xl border-3 shadow-md flex flex-col justify-between space-y-4 group transition-colors">
+          <div class="bg-white border-amber-100 hover:bg-amber-50 text-amber-700 p-8 rounded-3xl border shadow-md flex flex-col justify-between space-y-4 group transition-colors">
             <div>
               <h3 class="text-lg font-bold">
                 {{ i18n.t('index.card2.title')}}
@@ -99,7 +98,7 @@ const handleStartAdventure = (e: MouseEvent) => {
             </div>
           </div>
 
-          <div class="bg-white border-red-50 hover:bg-red-50 text-red-700 p-8 rounded-3xl border-3 shadow-md flex flex-col justify-between space-y-4 group transition-colors">
+          <div class="bg-white border-red-100 hover:bg-red-50 text-red-700 p-8 rounded-3xl border shadow-md flex flex-col justify-between space-y-4 group transition-colors">
             <div>
               <h3 class="text-lg font-bold">
                 {{ i18n.t('index.card3.title')}}
