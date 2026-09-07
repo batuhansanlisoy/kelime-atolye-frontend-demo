@@ -17,9 +17,6 @@ const navLinks = [
   },
 ];
 
-const isDictionaryOpen = ref(false);
-const isLangMenuOpen = ref(false);
-
 const currentSlugs = computed(() => {
   const lang = locale.value as 'tr' | 'en';
   
@@ -40,17 +37,6 @@ const getAlphabetSlug = (letter: string) => {
     ? `english-words-starting-with-${lowerLetter}` 
     : `ingilizce-${lowerLetter}-ile-baslayan-kelimeler`;
 };
-
-const closeDropdown = (e: MouseEvent) => {
-  const target = e.target as HTMLElement;
-  if (!target.closest('.dropdown-container')) {
-    isDictionaryOpen.value = false;
-    isLangMenuOpen.value = false;
-  }
-};
-
-onMounted(() => document.addEventListener('click', closeDropdown));
-onUnmounted(() => document.removeEventListener('click', closeDropdown));
 </script>
 
 <template>
@@ -69,11 +55,12 @@ onUnmounted(() => document.removeEventListener('click', closeDropdown));
       </span>
     </NuxtLink>
 
-    <!-- Açılır Menu -->
-    <div class="relative dropdown-container">
-      <button
-      @click="isDictionaryOpen = !isDictionaryOpen; isLangMenuOpen = false"
-      class="flex items-center gap-2 px-3.5 py-2 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors cursor-pointer">
+    <!-- Hover ile Açılan ve Tıklanınca Yönlendiren Sözlük Menüsü -->
+    <div class="relative group">
+      <NuxtLink
+      :to="localePath('dictionary')"
+      active-class="bg-gray-100 text-blue-600 font-semibold"
+      class="flex items-center gap-2 px-3.5 py-2 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-950 transition-colors">
         <UIcon name="material-symbols:book-2-rounded" class="size-4" />
 
         <span>
@@ -82,74 +69,61 @@ onUnmounted(() => document.removeEventListener('click', closeDropdown));
         
         <UIcon 
         name="lucide:chevron-down" 
-        class="size-3.5 text-gray-400 transition-transform duration-200" 
-        :class="{ 'rotate-180': isDictionaryOpen }" />
-      </button>
+        class="size-3.5 text-gray-400 transition-transform duration-200 group-hover:rotate-180" />
+      </NuxtLink>
 
       <!-- Açılır Pencere (Dropdown Content) -->
-      <transition
-      enter-active-class="transition duration-150 ease-out"
-      enter-from-class="transform scale-95 opacity-0"
-      enter-to-class="transform scale-100 opacity-100"
-      leave-active-class="transition duration-100 ease-in"
-      leave-from-class="transform scale-100 opacity-100"
-      leave-to-class="transform scale-95 opacity-0">
-        <div 
-        v-if="isDictionaryOpen" 
-        class="absolute left-0 mt-2 w-64 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 z-50 flex flex-col gap-1">
-          
-          <NuxtLink
-          :to="localePath({ name: 'dictionary-slug', params: { slug: currentSlugs.top100 } })"
-          @click="isDictionaryOpen = false"
-          class="link">
-            <UIcon name="material-symbols:star-rounded" class="size-4 text-amber-500" />
-            <span>
-              {{ t('english_top_100') }}
-            </span>
-          </NuxtLink>
+      <div 
+      class="absolute left-0 mt-0 w-64 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 z-50 flex flex-col gap-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+        
+        <NuxtLink
+        :to="localePath({ name: 'dictionary-slug', params: { slug: currentSlugs.top100 } })"
+        class="link">
+          <UIcon name="material-symbols:star-rounded" class="size-4 text-amber-500" />
+          <span>
+            {{ t('english_top_100') }}
+          </span>
+        </NuxtLink>
 
-          <NuxtLink
-          :to="localePath({ name: 'dictionary-slug', params: { slug: currentSlugs.top500 } })"
-          @click="isDictionaryOpen = false"
-          class="link">
-            <UIcon name="material-symbols:local-fire-department-rounded" class="size-4 text-orange-500" />
-            <span>
-              {{ t('english_top_500') }}
-            </span>
-          </NuxtLink>
+        <NuxtLink
+        :to="localePath({ name: 'dictionary-slug', params: { slug: currentSlugs.top500 } })"
+        class="link">
+          <UIcon name="material-symbols:local-fire-department-rounded" class="size-4 text-orange-500" />
+          <span>
+            {{ t('english_top_500') }}
+          </span>
+        </NuxtLink>
 
-          <div class="h-px bg-gray-100 my-1 mx-2"></div>
+        <div class="h-px bg-gray-100 my-1 mx-2"></div>
 
-          <!-- Yana Açılan Harf Dizini Grubu -->
-          <div class="relative group/sub">
-            <div class="link cursor-pointer justify-between">
-              <div class="flex items-center gap-3">
-                <UIcon name="material-symbols:sort-by-alpha-rounded" class="size-4 text-blue-500" />
-                <span>
-                  {{ t('A-Z_index') }}
-                </span>
-              </div>
-
-              <UIcon name="lucide:chevron-right" class="size-3.5 text-gray-400" />
+        <!-- Yana Açılan Harf Dizini Grubu -->
+        <div class="relative group/sub">
+          <div class="link cursor-pointer justify-between">
+            <div class="flex items-center gap-3">
+              <UIcon name="material-symbols:sort-by-alpha-rounded" class="size-4 text-blue-500" />
+              <span>
+                {{ t('A-Z_index') }}
+              </span>
             </div>
 
-            <!-- Yana Açılan 4-Sütunlu Harf Kutusu (Flyout) -->
-            <div class="absolute left-full top-0 ml-1 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 p-3 opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-200 z-50">
-              <div class="grid grid-cols-4 gap-1.5">
-                <NuxtLink
-                v-for="letter in alphabetLetters"
-                :key="letter"
-                :to="localePath({ name: 'dictionary-slug', params: { slug: getAlphabetSlug(letter) } })"
-                @click="isDictionaryOpen = false"
-                class="flex items-center justify-center h-8 text-xs font-semibold text-gray-700 bg-gray-50 hover:bg-blue-50 hover:text-sky-500 rounded-lg transition-colors">
-                  {{ letter }}
-                </NuxtLink>
-              </div>
-            </div>
+            <UIcon name="lucide:chevron-right" class="size-3.5 text-gray-400" />
           </div>
 
+          <!-- Yana Açılan 4-Sütunlu Harf Kutusu (Flyout) -->
+          <div class="absolute left-full top-0 ml-1 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 p-3 opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-200 z-50">
+            <div class="grid grid-cols-4 gap-1.5">
+              <NuxtLink
+              v-for="letter in alphabetLetters"
+              :key="letter"
+              :to="localePath({ name: 'dictionary-slug', params: { slug: getAlphabetSlug(letter) } })"
+              class="flex items-center justify-center h-8 text-xs font-semibold text-gray-700 bg-gray-50 hover:bg-blue-50 hover:text-sky-500 rounded-lg transition-colors">
+                {{ letter }}
+              </NuxtLink>
+            </div>
+          </div>
         </div>
-      </transition>
+
+      </div>
 
     </div>
 

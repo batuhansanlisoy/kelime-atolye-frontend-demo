@@ -12,7 +12,43 @@ const selectedCategory = ref<'top100' | 'top500' | 'all'>('top100');
 const selectedLetter = ref<string>('A');
 const page = ref<number>(1);
 
-// URL'deki slug değiştiğinde state'leri kontrol et ve yönet
+useSeoMeta({
+  title: computed(() => {
+    if (selectedCategory.value === 'top100') return t('seo.dictionary.top.english', { count: 100 });
+    if (selectedCategory.value === 'top500') return t('seo.dictionary.top.english', { count: 500 });
+    return t('seo.dictionary.az_with_start', { letter: selectedLetter.value });
+  }),
+  description: computed(() => {
+    if (selectedCategory.value === 'top100') return t('dictionary.top100.title');
+    if (selectedCategory.value === 'top500') return t('dictionary.top500.title'); // Anahtarındaki olası yazım hatasına dikkat (dictonary -> dictionary)
+    return t('seo.dictionary.az_with_start', { letter: selectedLetter.value });
+  }),
+  ogTitle: computed(() => {
+    if (selectedCategory.value === 'top100') return t('seo.dictionary.top.english', { count: 100 });
+    if (selectedCategory.value === 'top500') return t('seo.dictionary.top.english', { count: 500 });
+    return t('seo.dictionary.az_with_start', { letter: selectedLetter.value });
+  }),
+  ogDescription: computed(() => {
+    if (selectedCategory.value === 'top100') return t('dictionary.top100.title');
+    if (selectedCategory.value === 'top500') return t('dictionary.top500.title');
+    return t('seo.dictionary.az_with_start', { letter: selectedLetter.value });
+  }),
+  ogImage: '/img/logo.png',
+  ogType: 'website',
+  twitterCard: 'summary_large_image',
+  twitterTitle: computed(() => {
+    if (selectedCategory.value === 'top100') return t('seo.dictionary.top.english', { count: 100 });
+    if (selectedCategory.value === 'top500') return t('seo.dictionary.top.english', { count: 500 });
+    return t('seo.dictionary.az_with_start', { letter: selectedLetter.value });
+  }),
+  twitterDescription: computed(() => {
+    if (selectedCategory.value === 'top100') return t('dictionary.top100.title');
+    if (selectedCategory.value === 'top500') return t('dictionary.top500.title');
+    return t('seo.dictionary.az_with_start', { letter: selectedLetter.value });
+  }),
+  twitterImage: '/img/logo.png',
+});
+
 watch(
   slug,
   (newSlug) => {
@@ -89,13 +125,13 @@ const desc = computed(() => {
       
       <template #desc>
         <div class="flex flex-col gap-2 bg-white text-gray-700 ">
-          <span class="text-base font-medium">
+          <h1 class="text-lg font-medium">
             {{ desc }}
-          </span>
-  
-          <span class="text-xs text-gray-600 italic">
+          </h1>
+
+          <p class="text-xs text-gray-600 italic">
             {{ t('dictionary.frequency.desc') }}
-          </span>
+          </p>
         </div>
       </template>
   

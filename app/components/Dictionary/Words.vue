@@ -6,7 +6,7 @@ const { t } = useI18n();
 </script>
 
 <template>
-    <div class="relative min-h-75">
+    <section class="relative min-h-75">
       <!-- Boş Durum -->
       <div
       v-if="words.length === 0"
@@ -15,19 +15,19 @@ const { t } = useI18n();
       </div>
 
       <!-- Grid Kartlar Yapısı -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-        <div 
+      <ul v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+        <li 
         v-for="word in words" 
         :key="word.id"
-        class="bg-white border border-gray-100 p-3.5 rounded-xl shadow-xs hover:border-gray-200 transition-all flex items-center justify-between gap-3">
+        class="bg-gray-50/50 border border-gray-50 p-3.5 rounded-xl shadow-xs hover:border-gray-200 transition-all flex items-center justify-between gap-3">
           
           <div class="flex items-center gap-3 flex-1 min-w-0">
             <!--Kelime Etkiketleri-->
             <div class="flex flex-col gap-1 border-r pr-3 border-gray-200 shrink-0">
-              <span class="text-emerald-800 font-semibold text-xs leading-5">
+              <span class="text-green-700/90 font-semibold text-xs leading-5">
                 {{ t('lang.en') }}
               </span>
-              <span class="text-sky-800 font-semibold text-xs leading-5">
+              <span class="text-sky-700/90 font-semibold text-xs leading-5">
                 {{ t('lang.tr') }}
               </span>
             </div>
@@ -46,12 +46,12 @@ const { t } = useI18n();
 
           <!-- Frequency -->
           <div class="shrink-0">
-            <span class="px-1.5 py-0.5 text-[11px] font-mono bg-gray-50 text-gray-500 rounded border border-gray-100">
+            <span class="px-2 py-1 text-[12px] bg-white text-gray-500 rounded border border-gray-100">
               {{ word.frequency ? word.frequency.toFixed(1) : '-' }}
             </span>
           </div>
 
-        </div>
-      </div>
-    </div>
+        </li>
+      </ul>
+    </section>
 </template>

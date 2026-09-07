@@ -12,6 +12,16 @@ export default defineNuxtConfig({
     '@nuxt/ui',
     '@nuxtjs/i18n',
   ],
+  app: {
+    head: {
+      link: [
+        { rel: 'icon', type: 'image/x-icon', href: '/icons/favicon.ico' },
+        { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/icons/favicon-32x32.png' },
+        { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/icons/favicon-16x16.png' },
+        { rel: 'apple-touch-icon', sizes: '180x180', href: '/icons/apple-touch-icon.png' }
+      ]
+    }
+  },
   runtimeConfig: {
     public: {
       api: {

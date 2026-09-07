@@ -6,7 +6,7 @@ definePageMeta({
   layout: false
 });
 
-const { t, locale }      = useI18n();
+const { t, locale } = useI18n();
 const localePath = useLocalePath();
 
 const email      = ref('');
@@ -112,6 +112,8 @@ const handleLogin = async () => {
           <!-- Error Field -->
           <div
           v-if="errorMessage"
+          role="alert"
+          aria-live="assertive"
           class="p-3 bg-amber-50 border border-amber-200 rounded-xl text-center">
             <p class="text-xs text-amber-700 font-semibold">
               {{ errorMessage }}
@@ -140,11 +142,13 @@ const handleLogin = async () => {
           <button 
           type="submit"
           :disabled="isLoading"
+          :aria-busy="isLoading"
           class="w-full py-4 bg-linear-to-r from-teal-500 to-emerald-500 hover:from-teal-600 hover:to-emerald-600 text-white font-bold rounded-2xl text-base shadow-lg shadow-teal-500/25 active:scale-[0.99] transition-all duration-200 disabled:opacity-50 cursor-pointer flex items-center justify-center gap-2">
             <UIcon
             v-if="isLoading"
             name="heroicons:arrow-path"
-            class="size-5 animate-spin" />
+            class="size-5 animate-spin"
+            aria-hidden="true" />
 
             <span>
               {{ isLoading ? t('form.login.waiting') : t('form.login') }}

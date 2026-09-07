@@ -208,6 +208,8 @@ const handleRegister = async () => {
           <!-- Error Message -->
           <div
           v-if="errorMessage"
+          role="alert"
+          aria-live="assertive"
           class="p-3 bg-amber-50 border border-amber-200 rounded-xl text-center">
             <p class="text-xs text-amber-700 font-semibold">
               {{ errorMessage }}
@@ -218,6 +220,7 @@ const handleRegister = async () => {
           <button 
           type="submit"
           :disabled="isLoading"
+          :aria-busy="isLoading"
           class="w-full py-4 mt-2 bg-linear-to-r from-teal-500 to-emerald-500 hover:from-teal-600 hover:to-emerald-600 text-white font-bold rounded-2xl text-base shadow-lg shadow-teal-500/25 active:scale-[0.99] transition-all duration-200 disabled:opacity-50 cursor-pointer flex items-center justify-center gap-2">
             <UIcon
             v-if="isLoading"
@@ -230,16 +233,19 @@ const handleRegister = async () => {
           </button>
         </form>
 
-        <div v-else class="py-12 flex flex-col items-center justify-center text-center space-y-4">
+        <div
+        role="status"
+        aria-live="polite"
+        v-else class="py-12 flex flex-col items-center justify-center text-center space-y-4">
           <div class="flex gap-4 items-center">
             <UIcon name="heroicons:check-circle" class="size-7 text-lime-500" />
             <h2 class="text-xl font-bold text-slate-800">
-              Kayıt Başarıyla Oluşturuldu!
+              {{ t('register.success_message') }}
             </h2>
           </div>
           
           <p class="text-sm text-slate-500 max-w-sm">
-            Giriş ekranına yönlendiriliyorsunuz, lütfen bekleyin...
+            {{ t('register.routing.login') }}
           </p>
 
           <UIcon name="heroicons:arrow-path" class="size-6 animate-spin text-teal-500 mt-2" />
